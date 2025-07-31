@@ -20,7 +20,7 @@ export default function CandidateModal({ open, onClose, candidate }: CandidateMo
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden dark:text-zinc-100">
         <DialogHeader>
           <DialogTitle>{candidate.name}</DialogTitle>
           <DialogDescription>Score: {candidate.score}</DialogDescription>

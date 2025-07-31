@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner"; // ✅ Correct usage
 
 interface Props {
   onResults: (results: any[]) => void;
@@ -22,7 +23,15 @@ export default function UploadForm({ onResults, setLoading }: Props) {
     const files = fileInputRef.current?.files;
     const jd = jdInputRef.current?.value;
 
-    if (!files || files.length === 0 || !jd) return;
+    if (!jd || jd.trim() === "") {
+      toast.error("Please enter a job description before submitting.");
+      return;
+    }
+
+    if (!files || files.length === 0) {
+      toast.error("Please upload at least one resume (PDF).");
+      return;
+    }
 
     const formData = new FormData();
     for (const file of Array.from(files)) {
@@ -39,11 +48,14 @@ export default function UploadForm({ onResults, setLoading }: Props) {
       const data = await res.json();
       onResults(data.results);
 
+      toast.success("Resumes uploaded and processed successfully.");
+
       // Clear inputs
       if (fileInputRef.current) fileInputRef.current.value = "";
       if (jdInputRef.current) jdInputRef.current.value = "";
     } catch (err) {
       console.error("Upload failed:", err);
+      toast.error("Something went wrong during upload.");
     } finally {
       setLoading(false);
     }
